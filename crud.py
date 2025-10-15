@@ -70,3 +70,14 @@ def delete_lead(db: Session, lead_id: int):
         db.commit()
         db.refresh(db_lead)
     return db_lead
+
+# Activity CRUD functions
+def create_lead_activity(db: Session, activity: schemas.ActivityCreate, lead_id: int, user_id: int):
+    db_activity = models.Activity(**activity.dict(), lead_id=lead_id, user_id=user_id)
+    db.add(db_activity)
+    db.commit()
+    db.refresh(db_activity)
+    return db_activity
+
+def get_lead_activities(db: Session, lead_id: int, skip: int = 0, limit: int = 100):
+    return db.query(models.Activity).filter(models.Activity.lead_id == lead_id).offset(skip).limit(limit).all()
