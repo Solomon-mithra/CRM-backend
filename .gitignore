@@ -1,0 +1,14 @@
+# Python virtual environment
+venv/
+
+# Caches
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
+
+# OS-specific
+.DS_Store
+
+crm.db

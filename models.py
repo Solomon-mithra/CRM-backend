@@ -51,3 +51,7 @@ class Activity(Base):
 
     lead = relationship("Lead", back_populates="activities")
     user = relationship("User", back_populates="activities")
+
+    @property
+    def user_name(self):
+        return self.user.username if self.user else None

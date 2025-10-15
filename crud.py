@@ -1,5 +1,7 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from typing import Optional
+from datetime import date, timedelta
+from sqlalchemy import func
 
 from . import models, schemas, security
 
@@ -80,4 +82,28 @@ def create_lead_activity(db: Session, activity: schemas.ActivityCreate, lead_id:
     return db_activity
 
 def get_lead_activities(db: Session, lead_id: int, skip: int = 0, limit: int = 100):
-    return db.query(models.Activity).filter(models.Activity.lead_id == lead_id).offset(skip).limit(limit).all()
+    return db.query(models.Activity).options(joinedload(models.Activity.user)).filter(models.Activity.lead_id == lead_id).offset(skip).limit(limit).all()
+
+# Dashboard CRUD functions
+def get_dashboard_stats(db: Session):
+    today = date.today()
+    start_of_week = today - timedelta(days=today.weekday())
+    start_of_month = today.replace(day=1)
+
+    total_leads = db.query(models.Lead).filter(models.Lead.is_active == True).count()
+    new_leads_this_week = db.query(models.Lead).filter(models.Lead.created_at >= start_of_week).count()
+    closed_leads_this_month = db.query(models.Lead).filter(models.Lead.status == "closed", models.Lead.updated_at >= start_of_month).count()
+    total_activities = db.query(models.Activity).count()
+
+    leads_by_status = db.query(models.Lead.status, func.count(models.Lead.id)).group_by(models.Lead.status).all()
+
+    recent_activities = db.query(models.Activity).order_by(models.Activity.created_at.desc()).limit(10).all()
+
+    return {
+        "total_leads": total_leads,
+        "new_leads_this_week": new_leads_this_week,
+        "closed_leads_this_month": closed_leads_this_month,
+        "total_activities": total_activities,
+        "leads_by_status": [{"status": status, "count": count} for status, count in leads_by_status],
+        "recent_activities": recent_activities,
+    }

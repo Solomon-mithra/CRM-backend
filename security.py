@@ -1,10 +1,12 @@
+import os
 from datetime import datetime, timedelta
 from typing import Optional
 
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 
-SECRET_KEY = "your-secret-key"  # In a real app, load this from environment variables
+# It's crucial to load this from an environment variable in production
+SECRET_KEY = os.environ.get("SECRET_KEY", "a_default_insecure_secret_for_development")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
