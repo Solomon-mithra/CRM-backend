@@ -9,7 +9,7 @@ from ..database import SessionLocal
 
 router = APIRouter()
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/users/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/users/login")
 
 # Dependency to get DB session
 def get_db():
