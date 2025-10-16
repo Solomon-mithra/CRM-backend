@@ -4,8 +4,11 @@ from sqlalchemy.orm import Session
 from datetime import timedelta
 from jose import JWTError, jwt
 
-from .. import crud, models, schemas, security
-from ..database import SessionLocal
+import crud
+import models
+import schemas
+import security
+from database import SessionLocal
 
 router = APIRouter()
 

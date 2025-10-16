@@ -3,7 +3,9 @@ from typing import Optional
 from datetime import date, timedelta
 from sqlalchemy import func
 
-from . import models, schemas, security
+import models
+import schemas
+import security
 
 def authenticate_user(db: Session, username: str, password: str):
     user = get_user_by_username(db, username=username)
