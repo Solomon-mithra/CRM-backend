@@ -5,6 +5,8 @@
 
 This document describes the backend API for authentication, lead management, activities, and dashboard metrics. It consolidates the validated manual tests into clear references with example requests and responses.
 
+Time Spent: 3-4 hours approx.
+
 ### Tech and Runtime
 
 - Framework: FastAPI
